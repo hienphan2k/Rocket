@@ -6,6 +6,7 @@ public class RocketShip : MonoBehaviour
 {
     [SerializeField] float mainThrust = 2000f;
     [SerializeField] float rotationThrust = 500f;
+    [SerializeField] AudioClip mainEngine, deathExplosionSFX, successLevelSFX;
     [SerializeField] ParticleSystem mainEngineParticles, explosionParticles;
 
     Rigidbody myRigidBody;
@@ -43,11 +44,13 @@ public class RocketShip : MonoBehaviour
 
             case "Finish":
                 myRigidBody.isKinematic = true;
+                AudioSource.PlayClipAtPoint(successLevelSFX, Camera.main.transform.position);
                 gameController.NextLevel();
                 break;
 
             default:
                 isAlive = false;
+                AudioSource.PlayClipAtPoint(deathExplosionSFX, Camera.main.transform.position);
                 gameController.ResetGame();
                 explosionParticles.Play();
                 break;
@@ -70,7 +73,7 @@ public class RocketShip : MonoBehaviour
         {
             if (!myAudioSource.isPlaying)
             {
-                myAudioSource.Play();
+                myAudioSource.PlayOneShot(mainEngine);
             }
 
             mainEngineParticles.Play();

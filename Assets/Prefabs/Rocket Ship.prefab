@@ -404,6 +404,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainThrust: 2000
   rotationThrust: 600
+  mainEngine: {fileID: 8300000, guid: 762aa03e866ef574ba6095a7351ab82d, type: 3}
+  deathExplosionSFX: {fileID: 8300000, guid: f2fe4ad1c6640554090e4d28aaace837, type: 3}
+  successLevelSFX: {fileID: 8300000, guid: a6c8bbde9b139fc42a496d3caa8ea10b, type: 3}
   mainEngineParticles: {fileID: 7069006415108849809}
   explosionParticles: {fileID: 9082715348595522661}
 --- !u!82 &3169098998083337241
@@ -416,7 +419,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 762aa03e866ef574ba6095a7351ab82d, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
