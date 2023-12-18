@@ -65,9 +65,11 @@ public class RocketShip : MonoBehaviour
     private void DeathRoutine()
     {
         isAlive = false;
-        AudioSource.PlayClipAtPoint(deathExplosionSFX, Camera.main.transform.position);
-        gameController.ResetGame();
         explosionParticles.Play();
+        AudioSource.PlayClipAtPoint(deathExplosionSFX, Camera.main.transform.position);
+
+        FindObjectOfType<ShakeCam>().ShakeCamera();
+        gameController.ResetGame();
     }
 
     private void SuccessRoutine()
