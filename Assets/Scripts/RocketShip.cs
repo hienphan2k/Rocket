@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RocketShip : MonoBehaviour
 {
+    [SerializeField] int maxHealth = 100;
+
     [SerializeField] float mainThrust = 2000f;
     [SerializeField] float rotationThrust = 500f;
     [SerializeField] AudioClip mainEngine, deathExplosionSFX, successLevelSFX;
@@ -12,15 +14,22 @@ public class RocketShip : MonoBehaviour
     Rigidbody myRigidBody;
     AudioSource myAudioSource;
     GameController gameController;
+    HealthBar myHealthBar;
 
     bool isAlive = true;
+    int currentHealth;
 
     // Start is called before the first frame update
     void Start()
     {
         myRigidBody = GetComponent<Rigidbody>();
         myAudioSource = GetComponent<AudioSource>();
+
         gameController = FindObjectOfType<GameController>();
+        myHealthBar = FindObjectOfType<HealthBar>();
+
+        currentHealth = maxHealth;
+        myHealthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -30,6 +39,7 @@ public class RocketShip : MonoBehaviour
         {
             RocketMovement();
         }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -43,20 +53,39 @@ public class RocketShip : MonoBehaviour
                 break;
 
             case "Finish":
-                myRigidBody.isKinematic = true;
-                AudioSource.PlayClipAtPoint(successLevelSFX, Camera.main.transform.position);
-                gameController.NextLevel();
+                SuccessRoutine();
                 break;
 
             default:
-                isAlive = false;
-                AudioSource.PlayClipAtPoint(deathExplosionSFX, Camera.main.transform.position);
-                gameController.ResetGame();
-                explosionParticles.Play();
+                TakeDamage(20);
                 break;
-
         }
+    }
 
+    private void DeathRoutine()
+    {
+        isAlive = false;
+        AudioSource.PlayClipAtPoint(deathExplosionSFX, Camera.main.transform.position);
+        gameController.ResetGame();
+        explosionParticles.Play();
+    }
+
+    private void SuccessRoutine()
+    {
+        myRigidBody.isKinematic = true;
+        AudioSource.PlayClipAtPoint(successLevelSFX, Camera.main.transform.position);
+        gameController.NextLevel();
+    }
+
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        myHealthBar.SetHealth(currentHealth);
+
+        if(currentHealth == 0)
+        {
+            DeathRoutine();
+        }
     }
 
     private void RocketMovement()
